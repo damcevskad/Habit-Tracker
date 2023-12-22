@@ -51,44 +51,38 @@
                     </div>
                 </div>
 
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">Habit Details</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Enter new habit..."
-                                        style="border-radius: 10px;" name="habit" [(ngModel)]="updateHabitValue">
-                                    <button class="btn btn-outline-success ms-2 rounded" type="button"
-                                        data-bs-dismiss="modal" (click)="updateHabit()">Update</button>
+                                    <input type="text" class="form-control" placeholder="Enter new habit..." style="border-radius: 10px;" name="habit" [(ngModel)]="updateHabitValue">
+                                    <button class="btn btn-outline-success ms-2 rounded" type="button" data-bs-dismiss="modal" (click)="updateHabit()">Save</button>
                                 </div>
-
+                
                                 <div class="mt-3">
                                     <label for="updateHabitDescription">Description:</label>
-                                    <input type="text" class="form-control" id="updateHabitDescription"
-                                        [(ngModel)]="updateHabitDescription">
+                                    <input type="text" class="form-control" id="updateHabitDescription" [(ngModel)]="updateHabitDescription">
                                 </div>
-
+                
                                 <div class="mt-3">
                                     <label for="updateHabitFrequency">Frequency:</label>
-                                    <input type="text" class="form-control" id="updateHabitFrequency"
-                                        [(ngModel)]="updateHabitFrequency">
+                                    <input type="text" class="form-control" id="updateHabitFrequency" [(ngModel)]="updateHabitFrequency">
                                 </div>
-
+                
                                 <div class="mt-3">
                                     <label for="updateHabitStartDate">Start Date:</label>
-                                    <input type="date" class="form-control" id="updateHabitStartDate"
-                                        [(ngModel)]="updateHabitStartDate">
+                                    <input type="date" class="form-control" id="updateHabitStartDate" [(ngModel)]="updateHabitStartDate">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
 
             </div>
             <div class="col"></div>

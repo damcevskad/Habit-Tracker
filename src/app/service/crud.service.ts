@@ -17,7 +17,7 @@ export class CrudService {
   createHabit(habit: Habit) : Observable<Habit> {
     return this.http.post<Habit>(this.serviceURL, habit)
   }
-
+  
   readHabit() : Observable<Habit[]> {
     return this.http.get<Habit[]>(this.serviceURL)
   }

@@ -61,7 +61,6 @@ export class DashboardComponent implements OnInit {
       .subscribe();
   }
   
-  
   readHabit() {
     this.crudService.readHabit()
       .pipe(
@@ -76,27 +75,32 @@ export class DashboardComponent implements OnInit {
       .subscribe();
   }
 
-
   updateHabit() {
     if (!this.updateHabitValue.trim()) {
-      alert('Please enter a habit.');
-      return;
+        alert('Please enter a habit.');
+        return;
     }
-  
-    this.habitObj.name = this.updateHabitValue;
-  
-    this.crudService.updateHabit(this.habitObj)
-      .pipe(
-        tap(res => {
-          this.ngOnInit();
-        }),
-        catchError(err => {
-          alert("Failed to update habit.");
-          throw err;
-        })
-      )
-      .subscribe();
-  }
+
+    const updatedHabit: Habit = {
+        ...this.habitObj, 
+        name: this.updateHabitValue,
+        description: this.updateHabitDescription,
+        frequency: this.updateHabitFrequency,
+        startDate: new Date(this.updateHabitStartDate),
+    };
+
+    this.crudService.updateHabit(updatedHabit)
+        .subscribe(
+            () => {
+                this.ngOnInit();
+                this.resetHabitDetails();
+            },
+            error => {
+                alert("Failed to update habit.");
+                console.error(error);
+            }
+        );
+}
   
 
   deleteHabit(ehabit: Habit) {
@@ -116,7 +120,10 @@ export class DashboardComponent implements OnInit {
   call(ehabit: Habit) {
     this.habitObj = ehabit;
     this.updateHabitValue = ehabit.name;
-  }
+    this.updateHabitDescription = ehabit.description;
+    this.updateHabitFrequency = ehabit.frequency;
+    this.updateHabitStartDate = ehabit.startDate?.toISOString().split('T')[0] || '';
+}
 
   private resetHabitDetails() {
     this.habitDescription = '';

@@ -2,16 +2,30 @@
   "habits": [
     {
       "id": 1,
-      "name": "Meditation",
-      "description": "",
-      "frequency": "",
+      "name": "Meditating",
+      "description": "Making time for meditation keeps us grounded and present.",
+      "frequency": "Daily",
       "startDate": null
     },
     {
       "id": 2,
       "name": "Running",
-      "description": "",
-      "frequency": "",
+      "description": "Training releases negative energy and keeps us in shape",
+      "frequency": "3 times per week",
+      "startDate": null
+    },
+    {
+      "name": "Studying",
+      "description": "Expanding knowledge",
+      "frequency": "Daily",
+      "startDate": null,
+      "id": 3
+    },
+    {
+      "id": 4,
+      "name": "Skincare",
+      "description": "Taking care of my skin makes me feel clean and fresh",
+      "frequency": "2 times per day",
       "startDate": null
     }
   ]
