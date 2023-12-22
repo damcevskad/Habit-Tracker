@@ -1,0 +1,18 @@
+{
+  "habits": [
+    {
+      "id": 1,
+      "name": "Meditation",
+      "description": "",
+      "frequency": "",
+      "startDate": null
+    },
+    {
+      "id": 2,
+      "name": "Running",
+      "description": "",
+      "frequency": "",
+      "startDate": null
+    }
+  ]
+}
