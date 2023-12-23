@@ -14,15 +14,18 @@ export class DashboardComponent implements OnInit {
   habitObj: Habit = new Habit();
   habitArr: Habit[] = [];
   addHabitValue: string = '';
-  updateHabitValue: string = '';
 
   habitDescription: string = '';
   habitFrequency: string = '';
-  habitStartDate: string = ''; 
+  habitStartDate: string = '';
 
-  updateHabitDescription: string = ''; 
-  updateHabitFrequency: string = '';  
-  updateHabitStartDate: string = '';  
+  updateHabitValue: string = '';
+  updateHabitDescription: string = '';
+  updateHabitFrequency: string = '';
+  updateHabitStartDate: string = '';
+
+  sortedHabits: Habit[] = [];
+  isSortedAsc: boolean = false;
 
   constructor(private crudService: CrudService) { }
 
@@ -33,19 +36,23 @@ export class DashboardComponent implements OnInit {
     this.habitArr = [];
     this.readHabit();
   }
-  
+
   createHabit() {
     if (!this.addHabitValue.trim()) {
       alert('Please enter a habit.');
       return;
     }
-  
+    if (this.habitArr.some(habit => habit.name.toLowerCase() === this.addHabitValue.toLowerCase())) {
+      alert('The habit is already in practice.');
+      return;
+    }
+
     const newHabit = new Habit();
     newHabit.name = this.addHabitValue;
     newHabit.description = this.habitDescription;
     newHabit.frequency = this.habitFrequency;
     newHabit.startDate = new Date(this.habitStartDate);
-  
+
     this.crudService.createHabit(newHabit)
       .pipe(
         tap(res => {
@@ -60,12 +67,13 @@ export class DashboardComponent implements OnInit {
       )
       .subscribe();
   }
-  
+
   readHabit() {
     this.crudService.readHabit()
       .pipe(
         tap((res: any) => {
           this.habitArr = res;
+          this.sortHabits();
         }),
         catchError(err => {
           alert("Unable to read habits.");
@@ -77,31 +85,31 @@ export class DashboardComponent implements OnInit {
 
   updateHabit() {
     if (!this.updateHabitValue.trim()) {
-        alert('Please enter a habit.');
-        return;
+      alert('Please enter a habit.');
+      return;
     }
 
     const updatedHabit: Habit = {
-        ...this.habitObj, 
-        name: this.updateHabitValue,
-        description: this.updateHabitDescription,
-        frequency: this.updateHabitFrequency,
-        startDate: new Date(this.updateHabitStartDate),
+      ...this.habitObj,
+      name: this.updateHabitValue,
+      description: this.updateHabitDescription,
+      frequency: this.updateHabitFrequency,
+      startDate: new Date(this.updateHabitStartDate),
     };
 
-    this.crudService.updateHabit(updatedHabit)
-        .subscribe(
-            () => {
-                this.ngOnInit();
-                this.resetHabitDetails();
-            },
-            error => {
-                alert("Failed to update habit.");
-                console.error(error);
-            }
-        );
-}
-  
+      this.crudService.updateHabit(updatedHabit)
+      .pipe(
+        tap(res => {
+          this.ngOnInit();
+          this.resetHabitDetails();
+        }),
+        catchError(err => {
+          alert("Failed to update habit.");
+          throw err;
+        })
+      )
+      .subscribe();
+  }
 
   deleteHabit(ehabit: Habit) {
     this.crudService.deleteHabit(ehabit)
@@ -117,18 +125,35 @@ export class DashboardComponent implements OnInit {
       .subscribe();
   }
 
+  sortHabits() {
+    this.isSortedAsc = !this.isSortedAsc;
+
+    this.sortedHabits = [...this.habitArr].sort((a, b) => {
+      const nameComparison = this.isSortedAsc
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name);
+
+      if (nameComparison === 0) {
+        const dateA = a.startDate || new Date(0);
+        const dateB = b.startDate || new Date(0);
+        return dateB.getTime() - dateA.getTime();
+      }
+
+      return nameComparison;
+    });
+  }
+
   call(ehabit: Habit) {
     this.habitObj = ehabit;
     this.updateHabitValue = ehabit.name;
     this.updateHabitDescription = ehabit.description;
     this.updateHabitFrequency = ehabit.frequency;
     this.updateHabitStartDate = ehabit.startDate?.toISOString().split('T')[0] || '';
-}
+  }
 
   private resetHabitDetails() {
     this.habitDescription = '';
     this.habitFrequency = '';
     this.habitStartDate = '';
   }
-
 }
