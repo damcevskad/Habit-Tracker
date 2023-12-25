@@ -5,7 +5,7 @@
       "name": "Meditating",
       "description": "Making time for meditation keeps us grounded and present.",
       "frequency": "Daily",
-      "startDate": null
+      "startDate": "2020-03-30T00:00:00.000Z"
     },
     {
       "id": 2,
@@ -26,7 +26,7 @@
       "name": "Skincare",
       "description": "Taking care of my skin makes me feel clean and fresh",
       "frequency": "Daily",
-      "startDate": null
+      "startDate": "2022-02-25T00:00:00.000Z"
     },
     {
       "id": 5,
@@ -34,6 +34,13 @@
       "description": "Coding is intellectually stimulating",
       "frequency": "Daily",
       "startDate": null
+    },
+    {
+      "id": 6,
+      "name": "Playing Guitar",
+      "description": "Playing guitar lets me embrace my artistic side",
+      "frequency": "Weekly",
+      "startDate": "2021-06-07T00:00:00.000Z"
     }
   ],
   "habitOptions": [

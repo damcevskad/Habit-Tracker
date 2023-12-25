@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CrudService } from '../../service/crud.service';
+import { CrudService } from '../../services/crud-service/crud.service';
 import { Habit } from '../../model/habit';
 import { catchError, tap } from 'rxjs/operators';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,8 +26,11 @@ export class DashboardComponent implements OnInit {
 
   sortedHabits: Habit[] = [];
   isSortedAsc: boolean = false;
+  selectedFrequency: string = 'All';
+  habitOptions: string[] = [];
+  
 
-  constructor(private crudService: CrudService) { }
+  constructor(private crudService: CrudService, private router: Router) {}
 
   ngOnInit(): void {
     this.addHabitValue = '';
@@ -156,4 +159,13 @@ export class DashboardComponent implements OnInit {
     this.habitFrequency = '';
     this.habitStartDate = '';
   }
+
+  navigateToMyHabits() {
+    this.router.navigate(['/my-habits']);
+  }
+
+  navigateToMyCalendar() {
+    this.router.navigate(['/my-calendar']);
+  }
 }
+

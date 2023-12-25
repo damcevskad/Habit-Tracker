@@ -4,5 +4,6 @@ export class Habit {
     description: string = '';
     frequency: string = '';
     startDate: Date | null = null;
+    practiced: boolean = false; 
   }
   
