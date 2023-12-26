@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Habit } from '../../model/habit'; 
 
 @Component({
@@ -11,18 +10,7 @@ import { Habit } from '../../model/habit';
 export class CalendarComponent {
 
   addHabitValue: string = '';
-  
 
   habits: Habit[] = [];
   selected: Date | null = null;
-
-  constructor(private router: Router) {}
-
-  navigateToMyHabits() {
-    this.router.navigate(['/my-habits']);
-  }
-
-  navigateToMyCalendar() {
-    this.router.navigate(['/my-calendar']);
-  }
 }

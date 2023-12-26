@@ -1,18 +1,8 @@
 <div class="container-fluid" style="margin: 20px">
     <div class="container">
-        <div class="row d-flex align-items-center" style="height: 800px;">
+        <div class="row d-flex align-items-center" >
             <div class="col"></div>
             <div class="col-md-8 text-center rounded shadow p-4" style="background-color: #FAEED1; overflow-y: auto; ">
-
-                <div class="card rounded shadow" style="background-color: #f6e1b5; border: none;">
-                    <h4 class="p-3" style="color: #607274;">Habit Tracker</h4>
-                </div>
-
-                <div class="d-flex justify-content-between m-4">
-                    <button class="btn btn-outline-secondary" (click)="navigateToMyHabits()">My Habits</button>
-                    <button class="btn btn-outline-secondary" (click)="navigateToMyCalendar()">My Calendar</button>
-                </div>                
-
                 <div class="rounded shadow p-4 m-4">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Create New Habit..."
@@ -30,12 +20,12 @@
                     
                 </div>
                 <div class="d-flex justify-content-between m-4">
-                    <h4 style="color: #607274">Habits</h4>
+                    <h4 style="color: #607274; font-size: 1.5rem" >Habits</h4>
 
                     <button class="btn btn-outline-secondary" (click)="sortHabits()">↕️</button>
                 </div>
 
-                <div style="overflow-y: auto rounded; height: 350px;">
+                <div style="overflow-y: auto rounded; height: 450px;">
                     <div class="m-4" *ngFor="let habit of sortedHabits">
                         <div class="p-3 rounded shadow">
                             <div class="input-group row ps-3">
@@ -60,7 +50,7 @@
                             <div class="modal-body">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Enter new habit..."
-                                        style="border-radius: 10px;" name="habit" [(ngModel)]="updateHabitValue">
+                                        style="border-radius: 10px;" name="habit" [(ngModel)]="updatedValue">
                                     <button class="btn btn-outline-success ms-2 rounded" type="button"
                                         data-bs-dismiss="modal" (click)="updateHabit()">Save</button>
                                 </div>
@@ -68,12 +58,12 @@
                                 <div class="mt-3">
                                     <label for="updateHabitDescription">Description:</label>
                                     <input type="text" class="form-control" id="updateHabitDescription"
-                                        [(ngModel)]="updateHabitDescription">
+                                        [(ngModel)]="updatedDescription">
                                 </div>
 
                                 <div class="mt-3">
                                     <label for="habitFrequency">Frequency:</label>
-                                    <select class="form-control" id="habitFrequency" [(ngModel)]="updateHabitFrequency">
+                                    <select class="form-control" id="habitFrequency" [(ngModel)]="updatedFrequency">
                                         <option value="Daily">Daily</option>
                                         <option value="Weekly">Weekly</option>
                                         <option value="Bi-Weekly">Bi-Weekly</option>
@@ -85,7 +75,7 @@
                                 <div class="mt-3">
                                     <label for="updateHabitStartDate">Start Date:</label>
                                     <input type="date" class="form-control" id="updateHabitStartDate"
-                                        [(ngModel)]="updateHabitStartDate">
+                                        [(ngModel)]="updatedStartDate">
                                 </div>
                             </div>
                         </div>

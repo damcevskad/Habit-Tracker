@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CrudService } from '../../services/crud-service/crud.service';
 import { Habit } from '../../model/habit';
 import { catchError, tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,32 +12,40 @@ import { Router } from '@angular/router';
 
 export class DashboardComponent implements OnInit {
   habitObj: Habit = new Habit();
-  habitArr: Habit[] = [];
+  allHabits: Habit[] = [];
   addHabitValue: string = '';
 
-  habitDescription: string = '';
-  habitFrequency: string = '';
-  habitStartDate: string = '';
+  defaultDescription: string = '';
+  defaultFrequency: string = '';
+  defaultStartDate: string = '';
 
-  updateHabitValue: string = '';
-  updateHabitDescription: string = '';
-  updateHabitFrequency: string = '';
-  updateHabitStartDate: string = '';
+  updatedValue: string = '';
+  updatedDescription: string = '';
+  updatedFrequency: string = '';
+  updatedStartDate: string = '';
 
   sortedHabits: Habit[] = [];
   isSortedAsc: boolean = false;
   selectedFrequency: string = 'All';
   habitOptions: string[] = [];
 
-  constructor(private crudService: CrudService, private router: Router) {}
+  private subscriptions: Subscription[] = [];
+
+  constructor(private crudService: CrudService) {}
 
   ngOnInit(): void {
+    this.initialize();
+  }
+
+  initialize(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+
     this.addHabitValue = '';
-    this.updateHabitValue = '';
+    this.updatedValue = '';
     this.habitObj = new Habit();
-    this.habitArr = [];
-    this.readHabit();
-    this.readHabitOptions(); 
+    this.allHabits = [];
+    this.readHabits();
+    this.readHabitOptions();
   }
 
   createHabit() {
@@ -45,23 +53,21 @@ export class DashboardComponent implements OnInit {
       alert('Please enter a habit.');
       return;
     }
-    if (this.habitArr.some(habit => habit.name.toLowerCase() === this.addHabitValue.toLowerCase())) {
+    if (this.allHabits.some(habit => habit.name.toLowerCase() === this.addHabitValue.toLowerCase())) {
       alert('The habit is already in practice.');
       return;
     }
 
     const newHabit = new Habit();
     newHabit.name = this.addHabitValue;
-    newHabit.description = this.habitDescription;
-    newHabit.frequency = this.habitFrequency;
-    newHabit.startDate = new Date(this.habitStartDate);
+    newHabit.description = this.defaultDescription;
+    newHabit.frequency = this.defaultFrequency;
+    newHabit.startDate = new Date(this.defaultStartDate);
 
     this.crudService.createHabit(newHabit)
       .pipe(
         tap(res => {
-          this.ngOnInit();
-          this.addHabitValue = '';
-          this.resetHabitDetails()
+          this.initialize();
           this.sortHabits();
         }),
         catchError(err => {
@@ -72,11 +78,11 @@ export class DashboardComponent implements OnInit {
       .subscribe();
   }
 
-  readHabit() {
-    this.crudService.readHabit()
+  readHabits() {
+    this.crudService.readHabits()
       .pipe(
         tap((res: any) => {
-          this.habitArr = res;
+          this.allHabits = res;
           this.sortHabits();
         }),
         catchError(err => {
@@ -88,24 +94,23 @@ export class DashboardComponent implements OnInit {
   }
 
   updateHabit() {
-    if (!this.updateHabitValue.trim()) {
+    if (!this.updatedValue.trim()) {
       alert('Please enter a habit.');
       return;
     }
 
     const updatedHabit: Habit = {
       ...this.habitObj,
-      name: this.updateHabitValue,
-      description: this.updateHabitDescription,
-      frequency: this.updateHabitFrequency,
-      startDate: new Date(this.updateHabitStartDate),
+      name: this.updatedValue,
+      description: this.updatedDescription,
+      frequency: this.updatedFrequency,
+      startDate: new Date(this.updatedStartDate),
     };
 
       this.crudService.updateHabit(updatedHabit)
       .pipe(
         tap(res => {
-          this.ngOnInit();
-          this.resetHabitDetails();
+          this.initialize();
           this.sortHabits();
         }),
         catchError(err => {
@@ -120,7 +125,7 @@ export class DashboardComponent implements OnInit {
     this.crudService.deleteHabit(ehabit)
       .pipe(
         tap(res => {
-          this.ngOnInit();
+          this.initialize();
           this.sortHabits();
         }),
         catchError(err => {
@@ -134,7 +139,7 @@ export class DashboardComponent implements OnInit {
 sortHabits() {
   this.isSortedAsc = !this.isSortedAsc;
 
-  this.sortedHabits = [...this.habitArr].sort((a, b) => {
+  this.sortedHabits = [...this.allHabits].sort((a, b) => {
     const nameComparison = a.name.localeCompare(b.name);
 
     if (nameComparison === 0) {
@@ -147,19 +152,12 @@ sortHabits() {
   });
 }
 
-
   call(ehabit: Habit) {
     this.habitObj = ehabit;
-    this.updateHabitValue = ehabit.name;
-    this.updateHabitDescription = ehabit.description;
-    this.updateHabitFrequency = ehabit.frequency;
-    this.updateHabitStartDate = ehabit.startDate?.toISOString().split('T')[0] || '';
-  }
-
-  private resetHabitDetails() {
-    this.habitDescription = '';
-    this.habitFrequency = '';
-    this.habitStartDate = '';
+    this.updatedValue = ehabit.name;
+    this.updatedDescription = ehabit.description;
+    this.updatedFrequency = ehabit.frequency;
+    this.updatedStartDate = ehabit.startDate?.toISOString().split('T')[0] || '';
   }
 
   readHabitOptions() {
@@ -180,18 +178,13 @@ sortHabits() {
     this.addHabitValue = selectedHabit;
   }
 
-  navigateToMyHabits() {
-    this.router.navigate(['/my-habits']);
-  }
-
-  navigateToMyCalendar() {
-    this.router.navigate(['/my-calendar']);
-  }
-
   filterHabits(event: any): void {
     const filterValue = event.target.value.toLowerCase();
     this.habitOptions = this.habitOptions.filter(option => option.toLowerCase().includes(filterValue));
 }
 
+ngOnDestroy(): void {
+  this.subscriptions.forEach(subscription => subscription.unsubscribe());
+}
 }
 

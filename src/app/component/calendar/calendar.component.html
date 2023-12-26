@@ -1,24 +1,14 @@
 <div class="container-fluid" style="margin: 20px">
     <div class="container">
-        <div class="row d-flex align-items-center" style="height: 800px;">
+        <div class="row d-flex align-items-center">
             <div class="col"></div>
             <div class="col-md-8 text-center rounded shadow p-4" style="background-color: #FAEED1; overflow-y: auto; ">
-
-                <div class="card rounded shadow" style="background-color: #f6e1b5; border: none;">
-                    <h4 class="p-3" style="color: #607274;">Habit Tracker</h4>
-                </div>
-
                 <div class="d-flex justify-content-between m-4">
-                    <button class="btn btn-outline-secondary" (click)="navigateToMyHabits()">My Habits</button>
-                    <button class="btn btn-outline-secondary" (click)="navigateToMyCalendar()">My Calendar</button>
-                </div>                
-
-                <div class="d-flex justify-content-between m-4">
-                    <h4 style="color: #607274">Calendar</h4>
+                    <h4 style="color: #607274; font-size: 1.5rem">Calendar</h4>
 
                 </div>
                 <div class="d-flex justify-content-center align-items-center">
-                    <mat-card class="calendar">
+                    <mat-card class="calendar" style="width: 60%;">
                         <mat-calendar [(selected)]="selected"></mat-calendar>
                     </mat-card>
                 </div>
