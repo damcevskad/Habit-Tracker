@@ -28,7 +28,6 @@ export class DashboardComponent implements OnInit {
   isSortedAsc: boolean = false;
   selectedFrequency: string = 'All';
   habitOptions: string[] = [];
-  
 
   constructor(private crudService: CrudService, private router: Router) {}
 
@@ -38,6 +37,7 @@ export class DashboardComponent implements OnInit {
     this.habitObj = new Habit();
     this.habitArr = [];
     this.readHabit();
+    this.readHabitOptions(); 
   }
 
   createHabit() {
@@ -62,6 +62,7 @@ export class DashboardComponent implements OnInit {
           this.ngOnInit();
           this.addHabitValue = '';
           this.resetHabitDetails()
+          this.sortHabits();
         }),
         catchError(err => {
           alert(err);
@@ -105,6 +106,7 @@ export class DashboardComponent implements OnInit {
         tap(res => {
           this.ngOnInit();
           this.resetHabitDetails();
+          this.sortHabits();
         }),
         catchError(err => {
           alert("Failed to update habit.");
@@ -119,6 +121,7 @@ export class DashboardComponent implements OnInit {
       .pipe(
         tap(res => {
           this.ngOnInit();
+          this.sortHabits();
         }),
         catchError(err => {
           alert("Failed to delete habit.");
@@ -128,23 +131,22 @@ export class DashboardComponent implements OnInit {
       .subscribe();
   }
 
-  sortHabits() {
-    this.isSortedAsc = !this.isSortedAsc;
+sortHabits() {
+  this.isSortedAsc = !this.isSortedAsc;
 
-    this.sortedHabits = [...this.habitArr].sort((a, b) => {
-      const nameComparison = this.isSortedAsc
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name);
+  this.sortedHabits = [...this.habitArr].sort((a, b) => {
+    const nameComparison = a.name.localeCompare(b.name);
 
-      if (nameComparison === 0) {
-        const dateA = a.startDate || new Date(0);
-        const dateB = b.startDate || new Date(0);
-        return dateB.getTime() - dateA.getTime();
-      }
+    if (nameComparison === 0) {
+      const dateA = a.startDate || new Date(0);
+      const dateB = b.startDate || new Date(0);
+      return this.isSortedAsc ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
+    }
 
-      return nameComparison;
-    });
-  }
+    return this.isSortedAsc ? nameComparison : -nameComparison;
+  });
+}
+
 
   call(ehabit: Habit) {
     this.habitObj = ehabit;
@@ -160,6 +162,24 @@ export class DashboardComponent implements OnInit {
     this.habitStartDate = '';
   }
 
+  readHabitOptions() {
+    this.crudService.readHabitOptions()
+      .pipe(
+        tap((res: any) => {
+          this.habitOptions = res;
+        }),
+        catchError(err => {
+          alert("Unable to read habit options.");
+          throw err;
+        })
+      )
+      .subscribe();
+  }
+
+  selectHabit(selectedHabit: string) {
+    this.addHabitValue = selectedHabit;
+  }
+
   navigateToMyHabits() {
     this.router.navigate(['/my-habits']);
   }
@@ -167,5 +187,11 @@ export class DashboardComponent implements OnInit {
   navigateToMyCalendar() {
     this.router.navigate(['/my-calendar']);
   }
+
+  filterHabits(event: any): void {
+    const filterValue = event.target.value.toLowerCase();
+    this.habitOptions = this.habitOptions.filter(option => option.toLowerCase().includes(filterValue));
+}
+
 }
 

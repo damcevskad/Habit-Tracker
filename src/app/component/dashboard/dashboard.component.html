@@ -1,11 +1,11 @@
 <div class="container-fluid" style="margin: 20px">
     <div class="container">
-        <div class="row" style="height: 800px;">
+        <div class="row d-flex align-items-center" style="height: 800px;">
             <div class="col"></div>
-            <div class="col-md-8 rounded shadow p-4" style="background-color: #FAEED1; overflow-y: auto;">
+            <div class="col-md-8 text-center rounded shadow p-4" style="background-color: #FAEED1; overflow-y: auto; ">
 
                 <div class="card rounded shadow" style="background-color: #f6e1b5; border: none;">
-                    <h4 class="p-3" style="color: #607274; text-align: center;">Habit Tracker</h4>
+                    <h4 class="p-3" style="color: #607274;">Habit Tracker</h4>
                 </div>
 
                 <div class="d-flex justify-content-between m-4">
@@ -14,17 +14,22 @@
                 </div>                
 
                 <div class="rounded shadow p-4 m-4">
-
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Create New Habit..."
-                            style="border-radius: 10px;" name="habit" [(ngModel)]="addHabitValue">
-                        <button class="btn btn-outline-success ms-2 rounded" type="button"
-                            (click)="createHabit()">+</button>
-
+                            style="border-radius: 10px;" name="habit" [(ngModel)]="addHabitValue"
+                            [matAutocomplete]="auto" (input)="filterHabits($event)">
+                            
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectHabit($event.option.viewValue)">
+                            <mat-option *ngFor="let option of habitOptions" [value]="option">
+                                {{ option }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    
+                        <button class="btn btn-outline-success ms-2 rounded" type="button" (click)="createHabit()">+</button>
                     </div>
+                    
                 </div>
-
-                <div class="d-flex justify-content-between  m-4">
+                <div class="d-flex justify-content-between m-4">
                     <h4 style="color: #607274">Habits</h4>
 
                     <button class="btn btn-outline-secondary" (click)="sortHabits()">↕️</button>

@@ -10,6 +10,9 @@ import { Habit } from '../../model/habit';
 
 export class CalendarComponent {
 
+  addHabitValue: string = '';
+  
+
   habits: Habit[] = [];
   selected: Date | null = null;
 

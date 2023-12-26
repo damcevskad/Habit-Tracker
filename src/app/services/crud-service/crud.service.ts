@@ -30,5 +30,9 @@ export class CrudService {
   deleteHabit(habit : Habit) : Observable<Habit> {
     return this.http.delete<Habit>(this.serviceURL + '/' + habit.id)
   }
+
+  readHabitOptions() {
+    return this.http.get('http://localhost:3000/habitOptions');
+}
 }
 
