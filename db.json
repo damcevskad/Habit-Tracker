@@ -32,7 +32,7 @@
       "id": 5,
       "name": "Coding",
       "description": "Coding is intellectually stimulating",
-      "frequency": "Daily",
+      "frequency": "Weekly",
       "startDate": null
     },
     {
@@ -41,6 +41,14 @@
       "description": "Playing guitar lets me embrace my artistic side",
       "frequency": "Weekly",
       "startDate": "2021-06-07T00:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "name": "Healthy Eating",
+      "description": "",
+      "frequency": "",
+      "startDate": null,
+      "practiced": false
     }
   ],
   "habitOptions": [

@@ -3,6 +3,7 @@ import { CrudService } from '../../services/crud-service/crud.service';
 import { Habit } from '../../model/habit';
 import { catchError, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,7 +32,7 @@ export class DashboardComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private crudService: CrudService) {}
+  constructor(private crudService: CrudService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.initialize();
@@ -50,11 +51,11 @@ export class DashboardComponent implements OnInit {
 
   createHabit() {
     if (!this.addHabitValue.trim()) {
-      alert('Please enter a habit.');
+      this.toastr.error('Please enter a habit.');
       return;
     }
     if (this.allHabits.some(habit => habit.name.toLowerCase() === this.addHabitValue.toLowerCase())) {
-      alert('The habit is already in practice.');
+      this.toastr.warning('The habit is already in practice.');
       return;
     }
 
@@ -65,17 +66,18 @@ export class DashboardComponent implements OnInit {
     newHabit.startDate = new Date(this.defaultStartDate);
 
     this.crudService.createHabit(newHabit)
-      .pipe(
-        tap(res => {
-          this.initialize();
-          this.sortHabits();
-        }),
-        catchError(err => {
-          alert(err);
-          throw err;
-        })
-      )
-      .subscribe();
+    .pipe(
+      tap(res => {
+        this.initialize();
+        this.sortHabits();
+        this.toastr.success('Habit added successfully.');
+      }),
+      catchError(err => {
+        this.toastr.error('Unable to create habit.');
+        throw err;
+      })
+    )
+    .subscribe();
   }
 
   readHabits() {
@@ -86,7 +88,7 @@ export class DashboardComponent implements OnInit {
           this.sortHabits();
         }),
         catchError(err => {
-          alert("Unable to read habits.");
+          this.toastr.error('"Unable to read habits.');
           throw err;
         })
       )
@@ -95,7 +97,7 @@ export class DashboardComponent implements OnInit {
 
   updateHabit() {
     if (!this.updatedValue.trim()) {
-      alert('Please enter a habit.');
+      this.toastr.error('Please enter a habit.');
       return;
     }
 
@@ -107,33 +109,35 @@ export class DashboardComponent implements OnInit {
       startDate: new Date(this.updatedStartDate),
     };
 
-      this.crudService.updateHabit(updatedHabit)
-      .pipe(
-        tap(res => {
-          this.initialize();
-          this.sortHabits();
-        }),
-        catchError(err => {
-          alert("Failed to update habit.");
-          throw err;
-        })
-      )
-      .subscribe();
+    this.crudService.updateHabit(updatedHabit)
+    .pipe(
+      tap(res => {
+        this.initialize();
+        this.sortHabits();
+        this.toastr.success('Habit updated successfully.');
+      }),
+      catchError(err => {
+        this.toastr.error('Failed to update habit.');
+        throw err;
+      })
+    )
+    .subscribe();
   }
 
   deleteHabit(ehabit: Habit) {
     this.crudService.deleteHabit(ehabit)
-      .pipe(
-        tap(res => {
-          this.initialize();
-          this.sortHabits();
-        }),
-        catchError(err => {
-          alert("Failed to delete habit.");
-          throw err;
-        })
-      )
-      .subscribe();
+    .pipe(
+      tap(res => {
+        this.initialize();
+        this.sortHabits();
+        this.toastr.success('Habit deleted successfully.');
+      }),
+      catchError(err => {
+        this.toastr.error('Failed to delete habit.');
+        throw err;
+      })
+    )
+    .subscribe();
   }
 
 sortHabits() {

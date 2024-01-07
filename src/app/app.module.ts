@@ -12,12 +12,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
+import { CalendarDataComponent } from './component/calendar-data/calendar-data.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     CalendarComponent,
+    CalendarDataComponent,
   ],
   imports: [
     BrowserModule,
